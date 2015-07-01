@@ -1,5 +1,5 @@
 import gps
-import HTU21D as htu
+import HTU21DF as htu
 
 # start gps by listening on port 2947 (gpsd) of localhost
 session = gps.gps("localhost", "2947")
@@ -8,14 +8,17 @@ session.stream(gps.WATCH_ENABLE | gps.WATCH_NEWSTYLE)
 while True:
     try:
     	report = session.next()
-		# Wait for a 'TPV' report and display the current time
-		# To see all report data, uncomment the line below
-	print report
+	# Wait for a 'TPV' report and display the current time
+	# To see all report data, uncomment the line below
         if report['class'] == 'TPV':
             if hasattr(report, 'time'):
-                print report.time
-        if hasattr(report, 'lat'):
-                print report.lat
+                print 'time\t\t', report.time
+            if hasattr(report, 'lat'):
+                print 'latitude\t', report.lat
+            if hasattr(report, 'lon'):
+                print 'longitude\t', report.lon
+            print 'temperature\t', htu.read_temperature()
+            print 'humidity\t', htu.read_humidity()
     
     except KeyError:
 		pass
