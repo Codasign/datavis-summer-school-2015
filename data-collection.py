@@ -16,12 +16,21 @@ def read_temp():
 pygame.init()
 screen = pygame.display.set_mode((320, 150))
 done = False
+font = pygame.font.SysFont("arial", 24)
 
 # variables for stop button
 stop_x = 10
 stop_y = 10
-stop_width = 100
+stop_width = 50
 stop_height = 100
+stop_text = font.render("Quit", True, (255, 255, 255))
+
+# variables for mark here button
+here_x = 80
+here_y = 10
+here_width = 200
+here_height = 100
+here_text = font.render("Press Here to Record This Spot", True, (255, 255, 255))
 
 def data_label(label):
     try:
@@ -59,6 +68,16 @@ while not done:
             x, y = event.pos
             if (x>stop_x and x<stop_x+stop_width and y>stop_y and y<stop_y+stop_height): 
                 done = True
+    
+    # read in sensor data
 
+    # draw stop button
     pygame.draw.rect(screen, (128, 12, 25), pygame.Rect(stop_x, stop_y, stop_width, stop_height))
+    screen.blit(stop_text, (stop_x + 10, stop_y+50))
+
+    # draw record here button
+    pygame.draw.rect(screen, (0, 128, 255), pygame.Rect(here_x, here_y, stop_width, stop_height))
+    screen.blit(here_text, (here_x, here_y))
+
+    # now show everything on the screen
     pygame.display.flip()
