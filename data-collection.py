@@ -1,4 +1,4 @@
-import pygame
+import pygame, csv
 import gps
 import HTU21DF as htu
 
@@ -7,10 +7,9 @@ session = gps.gps("localhost", "2947")
 session.stream(gps.WATCH_ENABLE | gps.WATCH_NEWSTYLE)
 
 
-# read in and display temperature
-def read_temp():
-    t = htu.read_temperature()
-
+# open csv files
+locations_csv = open('test.csv', 'wb')
+locations_writer = csv.writer(locations_csv)
 
 # set up window
 pygame.init()
@@ -34,29 +33,39 @@ here_text_1 = font.render("Touch Here to Record", True, (255, 255, 255))
 
 # other variables
 current_location = 1
+date_time = ''
+lat = ''
+lon = ''
+temp = ''
+humid = ''
 
 # note the current location and sensor data
 # for the locations csv file
 def record_here():
-    global current_location
+    global current_location, date_time, lat, lon, temp, humid
+    locations_writer.writerow([current_location, date_time, lat, lon, temp, humid])
     current_location+=1
 
-
 def read_sensors():
-    global session
+    global session, date_time, lat, lon, temp, humid
     try:
         report = session.next()
         # Wait for a 'TPV' report and display the current time
         # To see all report data, uncomment the line below
         if report['class'] == 'TPV':
             if hasattr(report, 'time'):
-                print 'time\t\t', report.time
+                #print 'time\t\t', report.time
+                date_time = report.time
             if hasattr(report, 'lat'):
-                print 'latitude\t', report.lat
+                #print 'latitude\t', report.lat
+                lat = report.lat
             if hasattr(report, 'lon'):
-                print 'longitude\t', report.lon
-            print 'temperature\t', htu.read_temperature()
-            print 'humidity\t', htu.read_humidity()
+                #print 'longitude\t', report.lon
+                lon = report.lon
+            #print 'temperature\t', htu.read_temperature()
+            #print 'humidity\t', htu.read_humidity()
+            temp = htu.read_temperature()
+            humid = htu.read_humidity()
     
     except KeyError:
         pass
@@ -72,12 +81,14 @@ while not done:
     for event in pygame.event.get():
         # if window was closed, quit
         if event.type == pygame.QUIT:
+            locations_csv.close()
             done = True
         # if mouse was pressed
         elif event.type == pygame.MOUSEBUTTONDOWN:
             x, y = event.pos
            # if stop button was pressed, quit
             if (x>stop_x and x<stop_x+stop_width and y>stop_y and y<stop_y+stop_height): 
+                locations_csv.close()
                 done = True
             # if record button was pressed
             if(x>here_x and x<here_x+here_width and y>here_y and y<here_y+here_height):
