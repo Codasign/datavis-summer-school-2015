@@ -22,6 +22,7 @@ pygame.init()
 screen = pygame.display.set_mode((320, 180))
 done = False
 font = pygame.font.SysFont("arial", 24)
+font_small = pygame.font.SysFont("arial", 16)
 
 # variables for stop button
 stop_x = 10
@@ -117,6 +118,9 @@ while not done:
     screen.blit(here_text_1, (here_x+3, here_y+50))
     here_text_2 = font.render("Location  "+ str(current_location), True, (255, 255, 255))
     screen.blit(here_text_2, (here_x+20, here_y+77))
+    #here_text_3 = font_small.render("it is now %f degrees" % (temp), True, (255, 255, 255))
+    #screen.blit(here_text_3, (here_x+30, here_y+100))
+
     
     # now show everything on the screen
     pygame.display.flip()
