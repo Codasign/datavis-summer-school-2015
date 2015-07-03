@@ -1,4 +1,4 @@
-import pygame, csv
+import pygame, csv, time
 import gps
 import HTU21DF as htu
 
@@ -8,8 +8,14 @@ session.stream(gps.WATCH_ENABLE | gps.WATCH_NEWSTYLE)
 
 
 # open csv files
-locations_csv = open('test.csv', 'wb')
+current_datetime = time.strftime("%Y-%m-%d-%H-%M-%S")
+filename = current_datetime +'-locations.csv'
+locations_csv = open(filename, 'wb')
 locations_writer = csv.writer(locations_csv)
+
+filename = time.strftime("%Y-%m-%d-%H-%M-%S")+'-path.csv'
+path_csv = open(filename, 'wb')
+path_writer = csv.writer(path_csv)
 
 # set up window
 pygame.init()
@@ -66,6 +72,7 @@ def read_sensors():
             #print 'humidity\t', htu.read_humidity()
             temp = htu.read_temperature()
             humid = htu.read_humidity()
+            path_writer.writerow([date_time, lat, lon, temp, humid])
     
     except KeyError:
         pass
@@ -78,10 +85,14 @@ is_stop_pressed = False
 
 
 while not done:
+    # read in sensor data
+    read_sensors()
+       
     for event in pygame.event.get():
         # if window was closed, quit
         if event.type == pygame.QUIT:
             locations_csv.close()
+            path_csv_close()
             done = True
         # if mouse was pressed
         elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -89,14 +100,13 @@ while not done:
            # if stop button was pressed, quit
             if (x>stop_x and x<stop_x+stop_width and y>stop_y and y<stop_y+stop_height): 
                 locations_csv.close()
+                path_csv.close()
                 done = True
             # if record button was pressed
             if(x>here_x and x<here_x+here_width and y>here_y and y<here_y+here_height):
                 record_here()
                 print "record"
-    
-    # read in sensor data
-    read_sensors()
+   
 
     # draw stop button
     pygame.draw.rect(screen, (128, 12, 25), pygame.Rect(stop_x, stop_y, stop_width, stop_height))
