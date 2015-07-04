@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import pygame, csv, time
 import gps
 import HTU21DF as htu
@@ -43,8 +44,8 @@ current_location = 1
 date_time = ''
 lat = ''
 lon = ''
-temp = ''
-humid = ''
+temp = 0.0
+humid = 0.0
 
 # note the current location and sensor data
 # for the locations csv file
@@ -118,8 +119,8 @@ while not done:
     screen.blit(here_text_1, (here_x+3, here_y+50))
     here_text_2 = font.render("Location  "+ str(current_location), True, (255, 255, 255))
     screen.blit(here_text_2, (here_x+20, here_y+77))
-    #here_text_3 = font_small.render("it is now %f degrees" % (temp), True, (255, 255, 255))
-    #screen.blit(here_text_3, (here_x+30, here_y+100))
+    here_text_3 = font_small.render("it is now %.2f degrees" %(temp), True, (255, 255, 255))
+    screen.blit(here_text_3, (here_x+30, here_y+100))
 
     
     # now show everything on the screen
