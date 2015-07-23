@@ -37,13 +37,14 @@ here_x = 75
 here_y = 10
 here_width = 240
 here_height = 160
+group_text = font.render("Group Orange", True, (255, 255, 255) )
 here_text_1 = font.render("Touch Here to Record", True, (255, 255, 255))
 
 # other variables
 current_location = 1
 date_time = ''
-lat = ''
-lon = ''
+lat = 0.0
+lon = 0.0
 temp = 0.0
 humid = 0.0
 
@@ -116,12 +117,18 @@ while not done:
 
     # draw record here button
     pygame.draw.rect(screen, (0, 128, 255), pygame.Rect(here_x, here_y, here_width, stop_height))
-    screen.blit(here_text_1, (here_x+3, here_y+50))
+    screen.blit(group_text, (here_x+3, here_y+5))
+    screen.blit(here_text_1, (here_x+3, here_y+30))
     here_text_2 = font.render("Location  "+ str(current_location), True, (255, 255, 255))
-    screen.blit(here_text_2, (here_x+20, here_y+77))
-    here_text_3 = font_small.render("it is now %.2f degrees" %(temp), True, (255, 255, 255))
-    screen.blit(here_text_3, (here_x+30, here_y+100))
+    screen.blit(here_text_2, (here_x+40, here_y+57))
+    lat_text = font_small.render("%.4f latitude" %(lat), True, (255, 255, 255))
+    screen.blit(lat_text, (here_x+40, here_y+80))
+    lon_text = font_small.render("%.4f longitude" %(lon), True, (255, 255, 255))
+    screen.blit(lon_text, (here_x+40, here_y+95))
+    temp_text = font_small.render("%.2f degrees" %(temp), True, (255, 255, 255))
+    screen.blit(temp_text, (here_x+40, here_y+110))
+    humid_text = font_small.render("%.2f%% humidity" %(humid), True, (255, 255, 255))
+    screen.blit(humid_text, (here_x+40, here_y+125))    
 
-    
     # now show everything on the screen
     pygame.display.flip()
