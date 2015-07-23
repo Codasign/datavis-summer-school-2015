@@ -9,12 +9,13 @@ session.stream(gps.WATCH_ENABLE | gps.WATCH_NEWSTYLE)
 
 
 # open csv files
+group_name = "Pear"
 current_datetime = time.strftime("%Y-%m-%d-%H-%M-%S")
-filename = current_datetime +'-locations.csv'
+filename = current_datetime +'-locations-'+group_name+'.csv'
 locations_csv = open(filename, 'wb')
 locations_writer = csv.writer(locations_csv)
 
-filename = time.strftime("%Y-%m-%d-%H-%M-%S")+'-path.csv'
+filename = time.strftime("%Y-%m-%d-%H-%M-%S")+'-path-'+group_name +'.csv'
 path_csv = open(filename, 'wb')
 path_writer = csv.writer(path_csv)
 
@@ -37,7 +38,7 @@ here_x = 75
 here_y = 10
 here_width = 240
 here_height = 160
-group_text = font.render("Group Orange", True, (255, 255, 255) )
+group_text = font.render("Group " + group_name, True, (255, 255, 255) )
 here_text_1 = font.render("Touch Here to Record", True, (255, 255, 255))
 
 # other variables
